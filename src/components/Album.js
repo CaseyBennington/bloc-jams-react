@@ -15,7 +15,8 @@ class Album extends Component {
             currentSong: album.songs[0],
             currentTime: 0,
             duration: album.songs[0].duration,
-            isPlaying: false
+            isPlaying: false,
+            volume: 0.8
         };
 
         this.audioElement = document.createElement('audio');
@@ -90,6 +91,15 @@ class Album extends Component {
         this.setState({ currentTime: newTime });
     }
 
+    handleVolumeChange(e) {
+        this.audioElement.volume = e.target.value;
+        this.setState({ volume: e.target.value });
+    }
+
+    formatTime(time) {
+        return time ? `${Math.floor(time / 60)}:${Number(time % 60 / 100).toFixed(2).substr(2,3)}` : '-:--'
+    }
+
     render() {
         return (
             <section className="album">
@@ -119,7 +129,7 @@ class Album extends Component {
                                         </button>
                                     </td>
                                     <td className="song-title">{song.title}</td>
-                                    <td className="song-duration">{song.duration}</td>
+                                    <td className="song-duration">{this.formatTime(song.duration)}</td>
                                 </tr>
                             )
                         }
@@ -130,10 +140,13 @@ class Album extends Component {
                     currentSong={this.state.currentSong}
                     currentTime={this.audioElement.currentTime}
                     duration={this.audioElement.duration}
+                    volume={this.state.volume}
+                    formatTime={(t) => this.formatTime(t)}
                     handleSongClick={() => this.handleSongClick(this.state.currentSong)}
                     handlePrevClick={() => this.handlePrevClick()}
                     handleNextClick={() => this.handleNextClick()}
                     handleTimeChange={(e) => this.handleTimeChange(e)}
+                    handleVolumeChange={(e) => this.handleVolumeChange(e)}
                 />
             </section>
         );
