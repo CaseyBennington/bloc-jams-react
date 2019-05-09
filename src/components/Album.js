@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import albumData from './../data/albums';
 import PlayerBar from './PlayerBar';
+import './album.css';
 
 class Album extends Component {
     constructor(props) {
@@ -100,6 +101,17 @@ class Album extends Component {
         return time ? `${Math.floor(time / 60)}:${Number(time % 60 / 100).toFixed(2).substr(2,3)}` : '-:--'
     }
 
+    songClass(song) {
+        if (this.state.currentSong === song) { 
+          if (this.state.isPlaying) { 
+            return 'song playing';
+          } else { 
+            return 'song'; 
+          }
+        }
+        return 'song';
+      }
+
     render() {
         return (
             <section className="album">
@@ -120,7 +132,7 @@ class Album extends Component {
                     <tbody>
                         {
                             this.state.album.songs.map( (song, index) =>
-                                <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
+                                <tr className={this.songClass(song)} key={index} onClick={() => this.handleSongClick(song)} >
                                     <td className="song-actions">
                                         <button>
                                             <span className="song-number">{index + 1}</span>
@@ -131,8 +143,7 @@ class Album extends Component {
                                     <td className="song-title">{song.title}</td>
                                     <td className="song-duration">{this.formatTime(song.duration)}</td>
                                 </tr>
-                            )
-                        }
+                        )}
                     </tbody>
                 </table>
                 <PlayerBar 
